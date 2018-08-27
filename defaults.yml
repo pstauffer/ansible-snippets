@@ -1,0 +1,43 @@
+```
+# tree roles/systemconfig
+systemconfig/
+├── defaults
+│   └── main.yml
+├── files
+│   └── etc
+│       ├── krb5.conf
+│       ├── krb5.keytab
+│       └── nsswitch.conf
+├── tasks
+│   └── main.yml
+
+
+4 directories, 5 files
+```
+
+```
+# defaults/main.yml
+---
+systemconfig_default_mode: '0660'
+
+systemconfig_filelist:
+  - file: etc/krb5.conf
+    mode: '0640'
+  - file: etc/krb5.keytab
+    mode: '0400'
+  - file: etc/nsswitch.conf
+```
+
+```
+# tasks/main.yml
+---
+- debug:
+    msg: '{{ systemconfig_filelist }}'
+
+- name: copy authentication files
+  copy:
+    dest: "/{{ item.file }}"
+    src: "{{ item.file }}"
+    mode: "{{ item.mode | default(systemconfig_default_mode) }}"
+  with_items: "{{ systemconfig_filelist }}"
+```

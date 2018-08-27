@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  connection: local
+
+# async value must be greater than the duration of the task.
+# (delay * retries) value must be greater than the duration of the task and greater than the async value!
+
+  tasks:
+  - name: pause 50
+    command: sleep 50
+    async: 100
+    poll: 0
+    register: task1
+
+  - name: pause 15
+    command: sleep 15
+    async: 100
+    poll: 0
+    register: task2
+
+  - name: wait for tasks to complete
+    async_status:
+      jid: '{{ item.ansible_job_id }}'
+    register: all_tasks
+    until: all_tasks.finished
+    retries: 100
+    delay: 10
+    with_items:
+      - '{{ task1 }}'
+      - '{{ task2 }}'
+
+  - name: run cleanup
+    debug:
+      msg: run cleanup on all hosts

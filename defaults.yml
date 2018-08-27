@@ -10,11 +10,9 @@ systemconfig/
 ├── tasks
 │   └── main.yml
 
-
 4 directories, 5 files
-```
 
-```
+
 # defaults/main.yml
 ---
 systemconfig_default_mode: '0660'
@@ -25,9 +23,8 @@ systemconfig_filelist:
   - file: etc/krb5.keytab
     mode: '0400'
   - file: etc/nsswitch.conf
-```
 
-```
+
 # tasks/main.yml
 ---
 - debug:

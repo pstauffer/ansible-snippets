@@ -1,4 +1,3 @@
-```
 # tree roles/systemconfig
 systemconfig/
 ├── defaults
@@ -40,4 +39,3 @@ systemconfig_filelist:
     src: "{{ item.file }}"
     mode: "{{ item.mode | default(systemconfig_default_mode) }}"
   with_items: "{{ systemconfig_filelist }}"
-```

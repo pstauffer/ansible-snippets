@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: starttime
+      command: date +%s
+      delegate_to: localhost
+      changed_when: false
+      register: starttime
+
+    - name: my tasks...
+      command: sleep 4
+
+    - name: endtime
+      command: date +%s
+      delegate_to: localhost
+      changed_when: false
+      register: endtime
+
+    - name: duration
+      debug:
+        msg: '{{ endtime.stdout|int - starttime.stdout|int }}'
